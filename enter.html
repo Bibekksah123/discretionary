@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary</title>
+</head>
+<body>
+    <h1>
+        Dictionary
+    </h1>
+    <div class="contain">
+        <input type="text" id="input-btn">
+        <button id="click">Click me</button>
+    </div>
+    <p id="meaning">Meaning will appear here</p>
+    <script>
+        let input = document.querySelector('#input-btn');
+        let click = document.querySelector('#click');
+        let out = document.querySelector('#meaning');
+
+        click.addEventListener("click", async () => {
+            let val = input.value;
+            if (val === '') {
+                alert('Please enter a word');
+            } else {
+                let url = `https://api.dictionaryapi.dev/api/v2/entries/en/${val}`;
+                try {
+                    let response = await fetch(url);
+                    let data = await response.json();
+                    if (data.title === "No Definitions Found") {
+                        out.textContent = "No definitions found for this word.";
+                    } else {
+                        let definitions = data[0].meanings[0].definitions[0].definition;
+                        out.textContent = definitions;
+                    }
+                } catch (error) {
+                    out.textContent = "Error fetching the definition.";
+                }
+            }
+        });
+    </script>
+</body>
+</html>
